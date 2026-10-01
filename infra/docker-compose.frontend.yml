@@ -1,0 +1,7 @@
+services:
+  arcnet_frontend_staging:
+    image: chicinfra/chic:frontend-prod
+    container_name: chic-frontend
+    restart: always
+    ports:
+      - "3000:3000"

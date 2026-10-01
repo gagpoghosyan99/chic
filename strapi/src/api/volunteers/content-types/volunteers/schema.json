@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "volunteerss",
+  "info": {
+    "singularName": "volunteers",
+    "pluralName": "volunteerss",
+    "displayName": "Volunteers"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "surname": {
+      "type": "string"
+    },
+    "fathername": {
+      "type": "string"
+    },
+    "birthdate": {
+      "type": "string"
+    },
+    "university": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    }
+  }
+}

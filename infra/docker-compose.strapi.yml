@@ -1,0 +1,29 @@
+services:
+  strapi:
+    image: chicinfra/chic:strapi-prod
+    container_name: strapi
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "1337:1337"
+    depends_on:
+      - strapi-db
+    volumes:
+      - ./chic/config:/app/chic/config
+      - ./chic/public:/app/chic/public
+      - ./chic/src:/app/chic/src
+      - ./chic/types:/app/chic/types
+
+  strapi-db:
+    image: postgres:16
+    container_name: strapi-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: strapi
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+    ports:
+      - "127.0.0.1:5432:5432"

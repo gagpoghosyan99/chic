@@ -1,0 +1,139 @@
+{
+  "common": {
+    "orgName": "Collaborative Healthcare Innovations Centre NGO",
+    "email": "Email",
+    "phone": "Tel.",
+    "back": "Back",
+    "home": "Home",
+    "send": "Send",
+    "success": "✅ Successfully sent.",
+    "error": "❌ An error occurred.",
+    "loading": "Loading..."
+  },
+  "nav": {
+    "about": "About Us",
+    "team": "Our Team",
+    "lecturers": "Our Lecturers",
+    "history": "History",
+    "activity": "Activities",
+    "courses": "Courses",
+    "qualityConsulting": "Quality Management System Consulting",
+    "licensingConsulting": "Licensing Consulting",
+    "construction": "Construction, renovation, and equipment supply of regional medical institutions",
+    "programs": "Programs",
+    "volunteer": "Volunteering",
+    "volunteers": "Our Volunteers",
+    "becomeVolunteer": "Become a Volunteer",
+    "announcements": "Blog",
+    "vacancies": "Vacancies"
+  },
+  "home": {
+    "welcome": "Welcome to Collaborative Healthcare Innovations Centre",
+    "thanks": "Thank you for visiting 🫶",
+    "thanksMessage": "We believe in a healthcare environment built on cooperation, trust, and care."
+  },
+  "history": {
+    "title": "History",
+    "founder": "Founder and President - Roza Margaryan",
+    "mission": "Our Mission",
+    "missionText": "to contribute to improving the quality of the healthcare system and preserving public health.",
+    "vision": "🎯 Our Vision",
+    "visionText": "achieving sustainable success through meeting beneficiaries' needs and becoming a reliable partner in healthcare.",
+    "values": "🎯 Our Values.",
+    "value1": "🔹 Professionalism",
+    "value2": "🔹 Responsibility",
+    "value3": "🔹 Honesty and Transparency",
+    "value4": "🔹 Teamwork"
+  },
+  "team": {
+    "title": "Our Team"
+  },
+  "lecturers": {
+    "title": "Our Lecturers"
+  },
+  "volunteers": {
+    "title": "Our Volunteers"
+  },
+  "partners": {
+    "title": "Our Partners"
+  },
+  "courses": {
+    "title": "Courses",
+    "senior": "Senior Healthcare Workers",
+    "mid": "Mid-level Healthcare Workers",
+    "eun": "(EUN) Electronic Educational Material",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "register": "Register",
+    "registrationForm": "Course Registration",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "email": "Email",
+    "phone": "Phone",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "successTitle": "Thank You",
+    "successMessage": "Thank you for registering. Our specialists will contact you soon.",
+    "close": "Close",
+    "phoneInvalid": "Phone number must contain at least 8 digits"
+  },
+  "volunteer": {
+    "title": "Become a Volunteer",
+    "name": "First Name",
+    "surname": "Last Name",
+    "fathername": "Middle Name",
+    "birthdate": "Date of Birth",
+    "university": "Educational Institution",
+    "phone": "Phone"
+  },
+  "consulting": {
+    "title": "Quality Management System Consulting",
+    "hospitals": "Medical Institutions",
+    "hospitalsText": "Text about quality management system consulting for healthcare facilities here.",
+    "pharmacies": "Pharmacies",
+    "pharmaciesText": "Text about quality management system consulting for pharmacies here.",
+    "laboratories": "Laboratories",
+    "labService1": "Laboratory Service 1",
+    "successStory": "Success Story",
+    "dental": "Dental Centers",
+    "dentalText": "Text about quality management system consulting for dental centers here.",
+    "viewDetails": "View Details"
+  },
+  "construction": {
+    "title": "Construction, renovation, and equipment supply of regional medical institutions",
+    "hospitals": "Medical Institutions",
+    "hospitalsText": "Text about construction, renovation, and equipment supply for healthcare facilities here.",
+    "pharmacies": "Pharmacies",
+    "pharmaciesText": "Text about construction, renovation, and equipment supply for pharmacies here.",
+    "laboratories": "Laboratories",
+    "labService1": "Laboratory Service 1",
+    "successStory": "Success Story",
+    "dental": "Dental Centers",
+    "dentalText": "Text about construction, renovation, and equipment supply for dental centers here.",
+    "viewDetails": "View Details"
+  },
+  "licensing": {
+    "title": "Licensing Consulting",
+    "hospitals": "Medical Institutions",
+    "hospitalsText": "Text about licensing consulting for healthcare facilities here.",
+    "pharmacies": "Pharmacies",
+    "pharmaciesText": "Text about licensing consulting for pharmacies here.",
+    "laboratories": "Laboratories",
+    "labService1": "Laboratory Service 1",
+    "successStory": "Success Story",
+    "dental": "Dental Centers",
+    "dentalText": "Text about licensing consulting for dental centers here.",
+    "viewDetails": "View Details"
+  },
+  "lab1": {
+    "title": "Laboratory Services Improvement",
+    "text1": "📈 This achievement is a key step in our organization's strategic development path, transforming the quality and sustainability of laboratory services.",
+    "text2": "💡 We especially consider it important that this process was successfully implemented with limited resources, proving that with effective management, team dedication, and a clear strategy, it is possible to create a system that ensures high quality without significant investments."
+  },
+  "lab2": {
+    "title": "Success Story",
+    "text1": "📈 We consider it important to note that the work was carried out under conditions of limited resources, but with maximum efficiency thanks to the high responsibility of management, the dedication of the laboratory staff, cohesive work, and persistent efforts.",
+    "text2": "💡 The entire laboratory staff readily accepted the changes and became a driving force in creating a success story."
+  }
+}
+

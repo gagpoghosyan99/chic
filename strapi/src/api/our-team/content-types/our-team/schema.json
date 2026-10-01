@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "our_teams",
+  "info": {
+    "singularName": "our-team",
+    "pluralName": "our-teams",
+    "displayName": "Our Team"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "full_name": {
+      "type": "string"
+    },
+    "profession": {
+      "type": "string"
+    },
+    "image_url": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "sortOrder": {
+      "type": "biginteger",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "required": false
+    }
+  }
+}

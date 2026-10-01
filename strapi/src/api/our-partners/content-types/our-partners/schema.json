@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "our_partnerss",
+  "info": {
+    "singularName": "our-partners",
+    "pluralName": "our-partnerss",
+    "displayName": "Our Partners"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {
+    "i18n": {
+      "localized": true
+    }
+  },
+  "attributes": {
+    "name": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "blog_url": {
+      "type": "string",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    }
+  }
+}

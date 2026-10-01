@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "registered_for_the_coursess",
+  "info": {
+    "singularName": "registered-for-the-courses",
+    "pluralName": "registered-for-the-coursess",
+    "displayName": "Registered for the courses"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "course": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string"
+    },
+    "full_name": {
+      "type": "string"
+    }
+  }
+}
