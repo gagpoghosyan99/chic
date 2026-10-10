@@ -66,6 +66,14 @@
           "localized": true
         }
       }
+    },
+    "sortOrder": {
+      "type": "biginteger",
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }

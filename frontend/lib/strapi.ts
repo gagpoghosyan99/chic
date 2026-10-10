@@ -10,6 +10,9 @@ export function getStrapiBaseUrl(): string {
 	return requiredEnv();
 }
 
+// Strapi returns only 25 items per request by default; 100 is the server's maxLimit.
+const LIST = { 'pagination[pageSize]': 100 };
+
 export function buildStrapiUrl(path: string, params?: Record<string, string | number | boolean | undefined>) {
 	const baseUrl = requiredEnv();
 	const url = new URL(`${baseUrl}${path.startsWith('/') ? path : `/${path}`}`);
@@ -71,7 +74,7 @@ interface StrapiResponseWithAttributes<T> {
 }
 
 export async function fetchOurTeam(locale: StrapiLocale): Promise<OurTeamItem[]> {
-	const url = buildStrapiUrl('/api/our-teams', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/our-teams', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Our Team: ${res.status}`);
@@ -147,7 +150,7 @@ interface StrapiResponseFlatVolunteer {
 }
 
 export async function fetchOurVolunteers(locale: StrapiLocale): Promise<OurVolunteerItem[]> {
-	const url = buildStrapiUrl('/api/our-volunteerss', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/our-volunteerss', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Our Volunteers: ${res.status}`);
@@ -221,7 +224,7 @@ interface StrapiResponseFlatPartner {
 }
 
 export async function fetchOurPartners(locale: StrapiLocale): Promise<OurPartnerItem[]> {
-	const url = buildStrapiUrl('/api/our-partnerss', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/our-partnerss', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Our Partners: ${res.status}`);
@@ -285,7 +288,7 @@ interface StrapiResponseFlatLecturer {
 }
 
 export async function fetchOurLecturers(locale: StrapiLocale): Promise<OurLecturerItem[]> {
-	const url = buildStrapiUrl('/api/our-lecturerss', { locale });
+	const url = buildStrapiUrl('/api/our-lecturerss', { locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Our Lecturers: ${res.status}`);
@@ -414,7 +417,7 @@ function normalizeBlogPost(item: any, locale: StrapiLocale): BlogPost {
 }
 
 export async function fetchBlogs(locale: StrapiLocale): Promise<BlogPost[]> {
-	const url = buildStrapiUrl('/api/blogs', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/blogs', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Blogs: ${res.status}`);
@@ -447,7 +450,7 @@ export async function fetchBlogById(id: number | string, locale: StrapiLocale): 
 		return null;
 	}
 
-	const baseParams: Record<string, string | number | boolean | undefined> = { populate: '*', locale };
+	const baseParams: Record<string, string | number | boolean | undefined> = { populate: '*', locale, ...LIST };
 	const url = buildStrapiUrl('/api/blogs', baseParams);
 	
 	// Fetch all blogs and filter client-side (Strapi v5 filter syntax can be tricky)
@@ -483,7 +486,7 @@ export async function fetchBlogById(id: number | string, locale: StrapiLocale): 
 
 // Keep for backward compatibility, but use fetchBlogById instead
 export async function fetchBlogByDocumentId(documentId: string, locale: StrapiLocale): Promise<BlogPost | null> {
-	const baseParams: Record<string, string | number | boolean | undefined> = { populate: '*', locale };
+	const baseParams: Record<string, string | number | boolean | undefined> = { populate: '*', locale, ...LIST };
 	const url = buildStrapiUrl('/api/blogs', baseParams);
 	
 	const res = await fetch(url, { next: { revalidate: 60 } });
@@ -699,6 +702,7 @@ export interface Course {
 	title: string;
 	description: string;
 	is_available: boolean;
+	sortOrder?: string | number | null;
 	cover_image?: {
 		url: string;
 		width?: number;
@@ -723,6 +727,7 @@ type FlatCourse = {
 	title: string;
 	description: string;
 	is_available: boolean;
+	sortOrder?: string | number | null;
 	cover_image?: Course['cover_image'];
 	createdAt?: string;
 	updatedAt?: string;
@@ -737,7 +742,7 @@ interface StrapiResponseFlatCourse {
 
 function normalizeCourse(item: any, locale: StrapiLocale): Course {
 	if (item && item.attributes) {
-		const { type, title, description, is_available, cover_image } = item.attributes;
+		const { type, title, description, is_available, cover_image, sortOrder } = item.attributes;
 		return {
 			id: item.id,
 			documentId: item.documentId || item.id.toString(),
@@ -745,6 +750,7 @@ function normalizeCourse(item: any, locale: StrapiLocale): Course {
 			title,
 			description,
 			is_available,
+			sortOrder,
 			cover_image,
 			createdAt: item.createdAt,
 			updatedAt: item.updatedAt,
@@ -752,7 +758,7 @@ function normalizeCourse(item: any, locale: StrapiLocale): Course {
 			locale: item.locale || locale,
 		};
 	}
-	const { type, title, description, is_available, cover_image, documentId } = item as FlatCourse;
+	const { type, title, description, is_available, cover_image, documentId, sortOrder } = item as FlatCourse;
 	return {
 		id: (item as FlatCourse).id,
 		documentId: documentId || (item as FlatCourse).id.toString(),
@@ -760,6 +766,7 @@ function normalizeCourse(item: any, locale: StrapiLocale): Course {
 		title,
 		description,
 		is_available,
+		sortOrder,
 		cover_image,
 		createdAt: (item as FlatCourse).createdAt,
 		updatedAt: (item as FlatCourse).updatedAt,
@@ -769,7 +776,7 @@ function normalizeCourse(item: any, locale: StrapiLocale): Course {
 }
 
 export async function fetchCourses(locale: StrapiLocale): Promise<Course[]> {
-	const url = buildStrapiUrl('/api/coursess', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/coursess', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Courses: ${res.status}`);
@@ -790,12 +797,12 @@ export async function fetchCourses(locale: StrapiLocale): Promise<Course[]> {
 
 	const items: Course[] = (json.data || []).map((item: any) => normalizeCourse(item, locale));
 
-	// Sort by availability: available courses first
+	// Available courses first, then by the order set in the admin panel (unordered ones last).
+	const order = (c: Course) => (c.sortOrder != null && c.sortOrder !== '' ? Number(c.sortOrder) : Infinity);
 	items.sort((a, b) => {
-		// If both have same availability, maintain original order
-		if (a.is_available === b.is_available) return 0;
-		// Available courses (true) come before unavailable (false)
-		return a.is_available ? -1 : 1;
+		if (a.is_available !== b.is_available) return a.is_available ? -1 : 1;
+		const diff = order(a) - order(b);
+		return Number.isNaN(diff) ? 0 : diff;
 	});
 
 	return items;
@@ -973,7 +980,7 @@ function normalizeHistory(item: any, locale: StrapiLocale): History {
 }
 
 export async function fetchHistories(locale: StrapiLocale): Promise<History[]> {
-	const url = buildStrapiUrl('/api/histories', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/histories', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Histories: ${res.status}`);
@@ -1162,7 +1169,7 @@ function normalizeQualityManagementSystemConsulting(item: any, locale: StrapiLoc
 }
 
 export async function fetchQualityManagementSystemConsultings(locale: StrapiLocale): Promise<QualityManagementSystemConsultingItem[]> {
-	const url = buildStrapiUrl('/api/quality-management-system-consultings', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/quality-management-system-consultings', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Quality Management System Consultings: ${res.status}`);
@@ -1188,7 +1195,7 @@ export async function fetchQualityManagementSystemConsultings(locale: StrapiLoca
  * Licensing Consulting - uses the same interface as QualityManagementSystemConsultingItem
  */
 export async function fetchLicensingConsultings(locale: StrapiLocale): Promise<QualityManagementSystemConsultingItem[]> {
-	const url = buildStrapiUrl('/api/licensing-consultings', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/licensing-consultings', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Licensing Consultings: ${res.status}`);
@@ -1214,7 +1221,7 @@ export async function fetchLicensingConsultings(locale: StrapiLocale): Promise<Q
  * Construction Renovation and Equipment Supply - uses the same interface as QualityManagementSystemConsultingItem
  */
 export async function fetchConstructionRenovationAndEquipmentSupplies(locale: StrapiLocale): Promise<QualityManagementSystemConsultingItem[]> {
-	const url = buildStrapiUrl('/api/construction-renovation-and-equipment-supplies', { populate: '*', locale });
+	const url = buildStrapiUrl('/api/construction-renovation-and-equipment-supplies', { populate: '*', locale, ...LIST });
 	const res = await fetch(url, { next: { revalidate: 60 } });
 	if (!res.ok) {
 		throw new Error(`Failed to fetch Construction Renovation and Equipment Supplies: ${res.status}`);

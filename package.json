@@ -1,0 +1,20 @@
+{
+  "name": "chic",
+  "private": true,
+  "description": "Local development tooling for chic.ngo (Strapi CMS + admin panel). No Docker required.",
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/dev/setup.mjs",
+    "dev": "node scripts/dev/run.mjs",
+    "dev:site": "node scripts/dev/run.mjs --site",
+    "db:pull": "node scripts/dev/pull-snapshot.mjs",
+    "db:reset": "node scripts/dev/setup.mjs --reset"
+  },
+  "engines": {
+    "node": ">=20 <=24.x"
+  },
+  "devDependencies": {
+    "embedded-postgres": "16.14.0-beta.17",
+    "pg": "^8.16.0"
+  }
+}
