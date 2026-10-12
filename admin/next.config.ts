@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   experimental: {
     serverActions: { bodySizeLimit: '2mb' },
   },
+  async rewrites() {
+    return [{ source: '/uploads/:path*', destination: `${(process.env.STRAPI_URL ?? 'http://127.0.0.1:1337').replace(/\/$/, '')}/uploads/:path*` }];
+  },
   async headers() {
     return [
       {

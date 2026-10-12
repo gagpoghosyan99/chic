@@ -1,0 +1,61 @@
+# Test copy of the CMS + new admin panel. Separate database and files; never touches
+# the production `strapi` / `strapi-db` containers. Deployed by infra/staging/deploy.sh.
+name: chic-staging
+
+x-no-watchtower: &no-watchtower
+  com.centurylinklabs.watchtower.enable: "false"
+
+services:
+  staging-db:
+    image: postgres:16
+    container_name: chic-staging-db
+    restart: unless-stopped
+    labels: *no-watchtower
+    environment:
+      POSTGRES_DB: strapi
+      POSTGRES_USER: strapi
+      POSTGRES_PASSWORD: ${STAGING_DB_PASSWORD:?}
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+
+  staging-strapi:
+    image: chicinfra/chic:strapi-prod
+    container_name: chic-staging-strapi
+    restart: unless-stopped
+    labels: *no-watchtower
+    command: ["npm", "run", "develop", "--", "--no-watch-admin"]
+    env_file: .env.strapi
+    depends_on:
+      - staging-db
+    ports:
+      - "127.0.0.1:1338:1337"
+    volumes:
+      - ./strapi/config:/app/chic/config
+      - ./strapi/public:/app/chic/public
+      - ./strapi/src:/app/chic/src
+      - ./strapi/types:/app/chic/types
+
+  staging-admin:
+    build:
+      context: ./admin
+      args:
+        STRAPI_URL: http://staging-strapi:1337
+    image: chic-admin:staging
+    container_name: chic-staging-admin
+    restart: unless-stopped
+    labels: *no-watchtower
+    env_file: .env.admin
+    depends_on:
+      - staging-strapi
+    ports:
+      - "127.0.0.1:3101:3000"
+
+  # Temporary public https link (random *.trycloudflare.com) until admin.chic.ngo has DNS.
+  staging-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: chic-staging-tunnel
+    restart: unless-stopped
+    labels: *no-watchtower
+    command: ["tunnel", "--no-autoupdate", "--url", "http://staging-admin:3000"]
+    depends_on:
+      - staging-admin
