@@ -4,6 +4,7 @@ import { useActionState } from 'react';
 import { Lock } from 'lucide-react';
 import { login } from '../actions';
 import { useT } from '@/components/I18n';
+import { withBasePath } from '@/lib/base-path';
 import { UiLangSwitcher } from '@/components/UiLangSwitcher';
 
 export default function LoginPage() {
@@ -14,7 +15,7 @@ export default function LoginPage() {
     <main className="flex min-h-screen items-center justify-center bg-gradient-to-br from-brand to-brand-dark p-4">
       <div className="w-full max-w-sm">
         <div className="mb-6 flex justify-center">
-          <img src="/logo.png" alt="CHIC" className="h-16 w-auto" />
+          <img src={withBasePath('/logo.png')} alt="CHIC" className="h-16 w-auto" />
         </div>
         <form action={action} className="card space-y-4 p-6">
           <h1 className="text-center text-lg font-semibold">{t('login.title')}</h1>

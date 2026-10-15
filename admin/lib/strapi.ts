@@ -1,4 +1,5 @@
 import 'server-only';
+import { BASE_PATH } from './base-path';
 import type { Lang } from './i18n';
 
 export type EntryStatus = 'draft' | 'published' | 'modified';
@@ -101,5 +102,6 @@ export const media = {
 export function publicUrl(url: string | undefined | null) {
   if (!url) return '';
   if (/^https?:\/\//.test(url)) return url;
-  return `${(process.env.STRAPI_PUBLIC_URL ?? process.env.STRAPI_URL ?? '').replace(/\/$/, '')}${url}`;
+  const origin = (process.env.STRAPI_PUBLIC_URL ?? process.env.STRAPI_URL ?? '').replace(/\/$/, '');
+  return `${origin || BASE_PATH}${url}`;
 }

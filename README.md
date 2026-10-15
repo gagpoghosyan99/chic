@@ -6,7 +6,7 @@ Source for [chic.ngo](https://chic.ngo), mirrored from the production server (`c
 |---|---|---|
 | `frontend/` | Next.js site (`chic.ngo`) | `chic-frontend` container, port 3000, from `/root/chic-frontend` |
 | `strapi/` | Strapi CMS (`strapi.chic.ngo`) | `strapi` container, port 1337, from `/root/chic-strapi/chic` |
-| `admin/` | CHIC admin panel (Next.js, `admin.chic.ngo`) | `chic-admin` container, 127.0.0.1:3100, from `/root/chic-admin` |
+| `admin/` | CHIC admin panel (Next.js, `chic.ngo/admin`) | `chic-admin` container, 127.0.0.1:3100, from `/root/chic-admin` |
 | `infra/nginx/` | nginx site configs | `/etc/nginx/sites-enabled/` |
 | `infra/docker-compose.*.yml` | Compose files | `/root/chic-frontend`, `/root/chic-strapi`, `/root/watchtower` |
 

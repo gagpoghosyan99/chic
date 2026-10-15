@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Deploys the admin panel to production (admin.chic.ngo) and the Strapi code it needs.
+# Deploys the admin panel to production (https://chic.ngo/admin) and the Strapi code it needs.
 #   bash infra/production/deploy.sh
 # Every run first backs up the production database and Strapi code to /root/backups on the server.
 set -euo pipefail
@@ -38,13 +38,13 @@ echo "[prod] Uploading the admin panel..."
 ssh "$HOST" "mkdir -p $DIR/admin; chmod 700 $DIR"
 rsync -az --delete --exclude node_modules --exclude .next --exclude .next-build --exclude '.env*' "$ROOT/admin/" "$HOST:$DIR/admin/"
 rsync -az "$ROOT/infra/production/docker-compose.yml" "$ROOT/infra/production/create-api-token.js" "$HOST:$DIR/"
-rsync -az "$ROOT/infra/nginx/admin.chic.ngo.conf" "$HOST:$DIR/nginx.conf"
+rsync -az "$ROOT/infra/nginx/chic.ngo.conf" "$HOST:$DIR/nginx.conf"
 
 if ! ssh "$HOST" "test -f $DIR/.env"; then
   echo "[prod] First deploy: creating the admin password and secrets..."
   PASSWORD="$(node -e 'console.log(require("crypto").randomBytes(9).toString("base64url"))')"
   HASH="$(node -e 'const c=require("crypto");const s=c.randomBytes(16);console.log(`scrypt.${s.toString("base64url")}.${c.scryptSync(process.argv[1],s,64).toString("base64url")}`)' "$PASSWORD")"
-  mkdir -p "$ROOT/.dev" && (umask 077 && printf 'CHIC admin panel (https://admin.chic.ngo)\n  password: %s\n' "$PASSWORD" > "$CREDS")
+  mkdir -p "$ROOT/.dev" && (umask 077 && printf 'CHIC admin panel (https://chic.ngo/admin)\n  password: %s\n' "$PASSWORD" > "$CREDS")
   ssh "$HOST" "HASH='$HASH' bash -s" <<'EOF'
 set -euo pipefail
 umask 077
@@ -75,14 +75,18 @@ fi
 
 echo "[prod] Building and starting the admin panel..."
 docker compose up -d --build --force-recreate admin
-for i in $(seq 1 60); do curl -fs -o /dev/null http://127.0.0.1:3100/login && break; sleep 2; done
-curl -fs -o /dev/null http://127.0.0.1:3100/login || { echo "Admin panel did not start"; exit 1; }
+for i in $(seq 1 60); do curl -fs -o /dev/null http://127.0.0.1:3100/admin/login && break; sleep 2; done
+curl -fs -o /dev/null http://127.0.0.1:3100/admin/login || { echo "Admin panel did not start"; exit 1; }
 
-if ! cmp -s nginx.conf /etc/nginx/sites-enabled/admin.chic.ngo.conf; then
-  echo "[prod] Installing nginx site admin.chic.ngo..."
-  cp nginx.conf /etc/nginx/sites-enabled/admin.chic.ngo.conf
-  nginx -t -q && systemctl reload nginx
+rm -f /etc/nginx/sites-enabled/admin.chic.ngo.conf
+SITE=/etc/nginx/sites-enabled/chic.ngo.conf
+if ! cmp -s nginx.conf "$SITE"; then
+  echo "[prod] Routing chic.ngo/admin to the admin panel..."
+  BACKUP="/root/backups/chic.ngo.conf-$(date +%Y%m%d-%H%M%S)"
+  cp "$SITE" "$BACKUP" && cp nginx.conf "$SITE"
+  nginx -t -q || { cp "$BACKUP" "$SITE"; echo "nginx config invalid, restored"; exit 1; }
 fi
+systemctl reload nginx
 echo "[prod] Admin panel is running."
 EOF
 echo "[prod] Password is in .dev/production-credentials.txt"

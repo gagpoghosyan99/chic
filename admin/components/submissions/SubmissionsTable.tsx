@@ -4,6 +4,7 @@ import { useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { Download, Search, ShieldAlert, Trash2 } from 'lucide-react';
 import { deleteSubmission } from '@/app/actions';
+import { withBasePath } from '@/lib/base-path';
 import { getSubmissionType } from '@/lib/content-types';
 import { useLabel, useT, useUiLang } from '../I18n';
 import { useConfirm } from '../ui/Confirm';
@@ -54,7 +55,7 @@ export function SubmissionsTable({ kind, rows }: { kind: string; rows: Row[] }) 
         <span className="text-sm text-slate-500">
           {filtered.length} {t('items')}
         </span>
-        <a href={`/api/export/${kind}`} className="btn-primary" download>
+        <a href={withBasePath(`/api/export/${kind}`)} className="btn-primary" download>
           <Download className="size-4" /> {t('export')}
         </a>
       </div>

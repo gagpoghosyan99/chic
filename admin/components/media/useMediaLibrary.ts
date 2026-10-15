@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { withBasePath } from '@/lib/base-path';
 import { ALLOWED_IMAGE_TYPES, MAX_UPLOAD_BYTES, type MediaValue } from '@/lib/media-types';
 import { useT } from '../I18n';
 import { useToast } from '../ui/Toast';
@@ -17,7 +18,7 @@ export function useMediaLibrary(active = true) {
   const load = useCallback(async (next: number) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/media?page=${next}`, { cache: 'no-store' });
+      const res = await fetch(withBasePath(`/api/media?page=${next}`), { cache: 'no-store' });
       if (!res.ok) throw new Error(String(res.status));
       const json: { data: MediaValue[]; hasMore: boolean } = await res.json();
       setItems((prev) => {
@@ -53,7 +54,7 @@ export function useMediaLibrary(active = true) {
       try {
         const body = new FormData();
         valid.forEach((f) => body.append('files', f));
-        const res = await fetch('/api/media', { method: 'POST', body });
+        const res = await fetch(withBasePath('/api/media'), { method: 'POST', body });
         if (!res.ok) throw new Error(String(res.status));
         const { data }: { data: MediaValue[] } = await res.json();
         setItems((prev) => [...data, ...prev]);

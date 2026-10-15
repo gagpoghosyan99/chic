@@ -4,6 +4,7 @@ import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { clearFailures, clientIp, endSession, isRateLimited, recordFailure, requireSession, startSession, verifyPassword } from '@/lib/auth';
+import { COOKIE_PATH } from '@/lib/base-path';
 import { getContentType, getSubmissionType, type ContentType } from '@/lib/content-types';
 import { isLang, type Lang } from '@/lib/i18n';
 import { media, panel, StrapiError } from '@/lib/strapi';
@@ -100,7 +101,7 @@ export async function logout() {
 
 export async function setUiLang(lang: string) {
   if (!isLang(lang)) return;
-  (await cookies()).set(UI_LANG_COOKIE, lang, { path: '/', maxAge: 365 * 24 * 3600, sameSite: 'lax' });
+  (await cookies()).set(UI_LANG_COOKIE, lang, { path: COOKIE_PATH, maxAge: 365 * 24 * 3600, sameSite: 'lax' });
   revalidatePath('/', 'layout');
 }
 

@@ -2,6 +2,7 @@ import 'server-only';
 import crypto from 'node:crypto';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { COOKIE_PATH } from './base-path';
 import { SESSION_COOKIE, SESSION_HOURS, createSessionToken, isValidSession } from './session';
 
 const MAX_ATTEMPTS = 5;
@@ -48,13 +49,13 @@ export async function startSession() {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    path: '/',
+    path: COOKIE_PATH,
     maxAge: SESSION_HOURS * 3600,
   });
 }
 
 export async function endSession() {
-  (await cookies()).delete(SESSION_COOKIE);
+  (await cookies()).delete({ name: SESSION_COOKIE, path: COOKIE_PATH });
 }
 
 export async function requireSession() {

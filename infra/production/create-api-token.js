@@ -10,7 +10,7 @@ const { createStrapi } = require('@strapi/strapi');
   if (existing) await tokens.revoke(existing.id);
   const token = await tokens.create({
     name,
-    description: 'Used by the CHIC admin panel (admin.chic.ngo)',
+    description: 'Used by the CHIC admin panel (chic.ngo/admin)',
     type: 'full-access',
     lifespan: null,
   });

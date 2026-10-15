@@ -7,6 +7,7 @@ import {
   BookOpen, Briefcase, ClipboardList, ExternalLink, GraduationCap, HandHeart, Handshake, HeartHandshake, Home, Image as ImageIcon,
   Info, LogOut, Menu, Newspaper, Presentation, Share2, ShieldCheck, Users, Wrench, X,
 } from 'lucide-react';
+import { withBasePath } from '@/lib/base-path';
 import { CONTENT_TYPES, SUBMISSION_TYPES } from '@/lib/content-types';
 import { logout } from '@/app/actions';
 import { useLabel, useT } from './I18n';
@@ -61,7 +62,7 @@ export function Sidebar({ siteUrl }: { siteUrl: string }) {
   const nav = (
     <nav className="flex h-full flex-col gap-1 overflow-y-auto px-3 py-4">
       <Link href="/" className="mb-2 flex items-center gap-2 px-3">
-        <img src="/logo.png" alt="CHIC" className="h-10 w-auto" />
+        <img src={withBasePath('/logo.png')} alt="CHIC" className="h-10 w-auto" />
       </Link>
       {item('/', t('nav.dashboard'), Home)}
       {section(t('nav.content'), CONTENT_TYPES.filter((c) => c.group === 'content').map((c) => item(`/content/${c.key}`, label(c.label), ICONS[c.key] ?? BookOpen)))}

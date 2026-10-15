@@ -9,6 +9,9 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Baked into the /uploads rewrite at build time.
 ARG STRAPI_URL=http://127.0.0.1:1337
 ENV STRAPI_URL=$STRAPI_URL
+# URL prefix the panel is served under, e.g. /admin (empty = site root).
+ARG BASE_PATH=
+ENV BASE_PATH=$BASE_PATH
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN npm run build

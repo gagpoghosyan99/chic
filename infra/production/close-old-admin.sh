@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Turns off public access to the built-in Strapi admin, once https://admin.chic.ngo works:
+# Turns off public access to the built-in Strapi admin, once https://chic.ngo/admin works:
 #   - strapi.chic.ngo only serves /api/*, /uploads/* and /_health (infra/nginx/strapi.chic.ngo.conf)
 #   - Strapi's port 1337 is bound to 127.0.0.1 instead of the whole internet
 #   - the staging test copy is stopped so nobody keeps editing it by mistake
@@ -9,8 +9,8 @@ set -euo pipefail
 HOST="${CHIC_SSH_HOST:-chic-prod}"
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 
-[ "$(curl -s -o /dev/null -w '%{http_code}' https://admin.chic.ngo/login)" = 200 ] \
-  || { echo "https://admin.chic.ngo is not reachable yet; not closing the old admin."; exit 1; }
+[ "$(curl -s -o /dev/null -w '%{http_code}' https://chic.ngo/admin/login)" = 200 ] \
+  || { echo "https://chic.ngo/admin is not reachable yet; not closing the old admin."; exit 1; }
 
 rsync -az "$ROOT/infra/nginx/strapi.chic.ngo.conf" "$HOST:/root/chic-admin/strapi-nginx.conf"
 ssh "$HOST" bash -s <<'EOF'
@@ -43,4 +43,4 @@ check https://chic.ngo/hy 200
 check "https://strapi.chic.ngo/api/coursess?locale=hy" 200
 check https://strapi.chic.ngo/admin 404
 check http://77.237.245.211:1337/admin 000
-check https://admin.chic.ngo/login 200
+check https://chic.ngo/admin/login 200

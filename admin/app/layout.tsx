@@ -2,12 +2,13 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { I18nProvider } from '@/components/I18n';
 import { ToastProvider } from '@/components/ui/Toast';
+import { withBasePath } from '@/lib/base-path';
 import { getUiLang } from '@/lib/ui-lang';
 
 export const metadata: Metadata = {
   title: 'CHIC Admin',
   robots: { index: false, follow: false },
-  icons: { icon: '/logo.png' },
+  icons: { icon: withBasePath('/logo.png') },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

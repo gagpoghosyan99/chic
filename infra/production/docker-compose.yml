@@ -1,5 +1,5 @@
-# The CHIC admin panel (admin.chic.ngo). Talks to the production `strapi` container over its
-# Docker network. Deployed by infra/production/deploy.sh into /root/chic-admin.
+# The CHIC admin panel (https://chic.ngo/admin). Talks to the production `strapi` container over
+# its Docker network. Deployed by infra/production/deploy.sh into /root/chic-admin.
 name: chic-admin
 
 services:
@@ -8,6 +8,7 @@ services:
       context: ./admin
       args:
         STRAPI_URL: http://strapi:1337
+        BASE_PATH: /admin
     image: chic-admin:prod
     container_name: chic-admin
     restart: unless-stopped
