@@ -50,7 +50,7 @@ services:
     ports:
       - "127.0.0.1:3101:3000"
 
-  # Temporary public https link (random *.trycloudflare.com) until admin.chic.ngo has DNS.
+  # Public https link with a random *.trycloudflare.com address that changes on restart.
   staging-tunnel:
     image: cloudflare/cloudflared:latest
     container_name: chic-staging-tunnel

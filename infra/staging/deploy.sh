@@ -100,6 +100,5 @@ for i in $(seq 1 30); do
 done
 echo "[staging] Ready."
 echo "  Temporary public link: ${URL:-not ready yet, run: docker logs chic-staging-tunnel}"
-echo "  admin.chic.ngo works once its DNS record exists and nginx has infra/nginx/admin.chic.ngo.conf"
 EOF
 echo "[staging] Password is in .dev/staging-credentials.txt"

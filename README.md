@@ -6,7 +6,7 @@ Source for [chic.ngo](https://chic.ngo), mirrored from the production server (`c
 |---|---|---|
 | `frontend/` | Next.js site (`chic.ngo`) | `chic-frontend` container, port 3000, from `/root/chic-frontend` |
 | `strapi/` | Strapi CMS (`strapi.chic.ngo`) | `strapi` container, port 1337, from `/root/chic-strapi/chic` |
-| `admin/` | New CHIC admin panel (Next.js), planned for `admin.chic.ngo` | not deployed yet |
+| `admin/` | CHIC admin panel (Next.js, `admin.chic.ngo`) | `chic-admin` container, 127.0.0.1:3100, from `/root/chic-admin` |
 | `infra/nginx/` | nginx site configs | `/etc/nginx/sites-enabled/` |
 | `infra/docker-compose.*.yml` | Compose files | `/root/chic-frontend`, `/root/chic-strapi`, `/root/watchtower` |
 
@@ -48,3 +48,15 @@ How production is kept safe:
 - Course registrations and volunteer applications, with Excel download.
 
 The admin talks to Strapi only through a private API in `strapi/src/api/panel/`, which requires a full-access API token.
+
+## Production deploy
+
+```bash
+bash infra/production/deploy.sh          # back up, update Strapi code + admin panel, (re)build and start
+bash infra/production/close-old-admin.sh # once: hide the built-in Strapi admin from the internet
+```
+
+- `deploy.sh` first saves a database dump and the Strapi code to `/root/backups/` on the server. It restarts Strapi only when `strapi/src` changed.
+- The admin password is in `.dev/production-credentials.txt` (created on the first deploy). To change it, run `node admin/scripts/hash-password.mjs "<new password>"`, replace the `ADMIN_PASSWORD_HASH=` line in `/root/chic-admin/.env` with the output, and run `deploy.sh` again.
+- The built-in Strapi admin is still there for developers, through an SSH tunnel: `ssh -N -L 1337:127.0.0.1:1337 chic-prod`, then open http://localhost:1337/admin.
+- `bash infra/staging/deploy.sh [--refresh]` runs a separate test copy (own database and files) in `/root/chic-staging`.

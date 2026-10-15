@@ -1,0 +1,25 @@
+# The CHIC admin panel (admin.chic.ngo). Talks to the production `strapi` container over its
+# Docker network. Deployed by infra/production/deploy.sh into /root/chic-admin.
+name: chic-admin
+
+services:
+  admin:
+    build:
+      context: ./admin
+      args:
+        STRAPI_URL: http://strapi:1337
+    image: chic-admin:prod
+    container_name: chic-admin
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: "false"
+    env_file: .env
+    ports:
+      - "127.0.0.1:3100:3000"
+    networks:
+      - strapi
+
+networks:
+  strapi:
+    external: true
+    name: chic-strapi_default
