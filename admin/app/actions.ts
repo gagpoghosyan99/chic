@@ -10,7 +10,7 @@ import { isLang, type Lang } from '@/lib/i18n';
 import { media, panel, StrapiError } from '@/lib/strapi';
 import { UI_LANG_COOKIE } from '@/lib/ui-lang';
 
-export type ActionResult = { ok: true; documentId?: string } | { ok: false; error: string; fields?: Record<string, string> };
+export type ActionResult = { ok: true; documentId?: string; count?: number } | { ok: false; error: string; fields?: Record<string, string> };
 
 const fail = (error: string, fields?: Record<string, string>): ActionResult => ({ ok: false, error, fields });
 
@@ -182,12 +182,12 @@ export async function reorderEntries(input: { type: string; locale?: string; doc
 }
 
 /** Opens or closes course registration for every language at once (live on the website immediately). */
-export async function setCourseAvailability(input: { documentId: string; available: boolean }) {
+export async function setCourseAvailability(input: { documentId: string; available: boolean }): Promise<ActionResult & { count?: number }> {
   return guard(async () => {
     if (!input.documentId || typeof input.available !== 'boolean') return fail('invalid');
-    await panel.setAvailability('courses', input.documentId, input.available);
+    const res = await panel.setAvailability('courses', input.documentId, input.available);
     refresh('courses');
-    return { ok: true };
+    return { ok: true, count: res.documentIds?.length ?? 1 };
   });
 }
 

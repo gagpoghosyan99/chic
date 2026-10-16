@@ -235,6 +235,8 @@ export default {
   },
 
   // Opens or closes registration for every language of a course at once (draft + published).
+  // Courses are separate documents per language (not linked translations), so siblings are
+  // matched by the same cover image and audience type.
   async setAvailability(ctx: any) {
     const { uid, model } = resolve(ctx);
     if (!model.attributes.is_available) ctx.throw(400, 'Content type has no availability');
@@ -242,10 +244,40 @@ export default {
     const available = ctx.request.body?.available;
     if (typeof available !== 'boolean') ctx.throw(400, 'available must be true or false');
 
+    const docs = getStrapi().documents(uid);
+    let source: any = null;
+    for (const locale of LOCALES) {
+      source = await docs.findOne({ documentId, locale, status: 'draft', populate: ['cover_image'] } as any);
+      if (source) break;
+    }
+    if (!source) ctx.throw(404, 'Not found');
+
+    const imageId = source.cover_image?.id ?? null;
+    const courseType = source.type ?? null;
+    const ids = new Set<string>([String(documentId)]);
+
+    if (imageId != null && courseType != null) {
+      for (const locale of LOCALES) {
+        const rows: any[] = await docs.findMany({
+          locale,
+          status: 'draft',
+          populate: ['cover_image'],
+          limit: 2000,
+        } as any);
+        for (const row of rows) {
+          const rowImage = row.cover_image?.id ?? null;
+          if (rowImage === imageId && row.type === courseType) ids.add(String(row.documentId));
+        }
+      }
+    }
+
     const meta: any = getStrapi().db.metadata.get(uid);
     const column = meta.attributes.is_available.columnName ?? 'is_available';
-    const updated = await getStrapi().db.connection(meta.tableName).where({ document_id: String(documentId) }).update({ [column]: available });
+    const updated = await getStrapi()
+      .db.connection(meta.tableName)
+      .whereIn('document_id', [...ids])
+      .update({ [column]: available });
     if (!updated) ctx.throw(404, 'Not found');
-    ctx.body = { ok: true, available };
+    ctx.body = { ok: true, available, documentIds: [...ids] };
   },
 };

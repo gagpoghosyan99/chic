@@ -33,7 +33,7 @@ export function CourseAvailability({
     startBusy(async () => {
       const res = await setCourseAvailability({ documentId, available: next });
       if (!res.ok) return toast('error', t('errorGeneric'));
-      toast('success', t(next ? 'toast.registrationOpen' : 'toast.registrationClosed'));
+      toast('success', t(next ? 'toast.registrationOpen' : 'toast.registrationClosed', { n: String(res.count ?? 1) }));
       router.refresh();
     });
   };

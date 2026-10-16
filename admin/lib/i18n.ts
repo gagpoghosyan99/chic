@@ -167,14 +167,14 @@ const dict = {
     ru: 'Открыть запись на этот курс для всех языков (HY, RU, EN)?',
   },
   'toast.registrationClosed': {
-    hy: 'Գրանցումը փակված է բոլոր լեզուներով',
-    en: 'Registration closed for all languages',
-    ru: 'Запись закрыта для всех языков',
+    hy: 'Գրանցումը փակված է ({n} լեզու)',
+    en: 'Registration closed ({n} language version(s))',
+    ru: 'Запись закрыта ({n} языковых версии)',
   },
   'toast.registrationOpen': {
-    hy: 'Գրանցումը բացված է բոլոր լեզուներով',
-    en: 'Registration opened for all languages',
-    ru: 'Запись открыта для всех языков',
+    hy: 'Գրանցումը բացված է ({n} լեզու)',
+    en: 'Registration opened ({n} language version(s))',
+    ru: 'Запись открыта ({n} языковых версии)',
   },
   'preview.note': {
     hy: 'Մոտավոր տեսքն է՝ ինչպես կերևա կայքում։ Պահպանված չէ, քանի դեռ չեք սեղմել պահպանման կոճակը։',

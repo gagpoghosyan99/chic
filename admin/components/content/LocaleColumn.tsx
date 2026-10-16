@@ -76,7 +76,10 @@ export function LocaleColumn({
 
   const save = (publish: boolean) =>
     startBusy(async () => {
-      const res = await saveEntry({ type: type.key, documentId: documentId ?? undefined, locale, data: serialize(values), publish });
+      const data = serialize(values);
+      // Existing courses: registration is changed only by CourseAvailability (all languages).
+      if (documentId && type.key === 'courses') delete data.is_available;
+      const res = await saveEntry({ type: type.key, documentId: documentId ?? undefined, locale, data, publish });
       if (!res.ok) {
         if (res.fields) setErrors(res.fields);
         toast('error', res.error === 'validation' ? t('editor.required') : `${t('errorGeneric')}: ${res.error}`);
