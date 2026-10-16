@@ -14,6 +14,7 @@ import type { Row } from '@/lib/rows';
 import { useLabel, useT, useUiLang } from '../I18n';
 import { StatusBadge } from '../ui/StatusBadge';
 import { useToast } from '../ui/Toast';
+import { CourseAvailability } from './CourseAvailability';
 
 export function EntryList({ typeKey, lang, rows: initialRows, counts }: { typeKey: string; lang: Lang; rows: Row[]; counts: Record<Lang, number> }) {
   const type = getContentType(typeKey)!;
@@ -147,11 +148,6 @@ function SortableRow({ row, typeKey, lang, draggable, hasImage, subtitle }: { ro
           <span className="block truncate font-medium">{row.title || '—'}</span>
           <span className="flex items-center gap-2 truncate text-sm text-slate-500">
             {subtitle}
-            {row.available !== null && (
-              <span className={`shrink-0 rounded px-1.5 text-xs ${row.available ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500'}`}>
-                {t(row.available ? 'course.open' : 'course.closed')}
-              </span>
-            )}
           </span>
         </span>
         <span className="hidden items-center gap-1 md:flex" title={t('list.translations')}>
@@ -165,6 +161,9 @@ function SortableRow({ row, typeKey, lang, draggable, hasImage, subtitle }: { ro
         <StatusBadge status={row.status} />
         <ChevronRight className="size-4 shrink-0 text-slate-300" />
       </Link>
+      {typeKey === 'courses' && row.available !== null && (
+        <CourseAvailability documentId={row.documentId} available={row.available} compact />
+      )}
     </li>
   );
 }

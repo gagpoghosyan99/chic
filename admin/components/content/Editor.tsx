@@ -7,6 +7,7 @@ import { getContentType } from '@/lib/content-types';
 import { LANGS, LANG_NAMES, type Lang } from '@/lib/i18n';
 import type { FormValues, Version } from '@/lib/editor-data';
 import { useLabel, useT } from '../I18n';
+import { CourseAvailability } from './CourseAvailability';
 import { LocaleColumn } from './LocaleColumn';
 
 export type Candidate = { documentId: string; title: string };
@@ -90,6 +91,15 @@ export function Editor({
       </header>
 
       {anyDirty && <p className="rounded-lg bg-amber-50 px-4 py-2 text-sm text-amber-800">{t('editor.unsaved')}</p>}
+
+      {type.key === 'courses' && documentId && (
+        <CourseAvailability
+          documentId={documentId}
+          available={
+            (versions[initialLang] ?? Object.values(versions).find(Boolean))?.values.is_available === true
+          }
+        />
+      )}
 
       <div className={`grid items-start gap-5 ${columns.length >= 3 ? 'xl:grid-cols-3' : columns.length === 2 ? 'lg:grid-cols-2' : 'max-w-3xl'}`}>
         {columns.map((locale) => {

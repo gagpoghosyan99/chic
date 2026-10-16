@@ -86,6 +86,8 @@ export const panel = {
     request(`/api/panel/${type}/entries/${documentId}/link${q({ locale })}`, { method: 'POST', body: JSON.stringify({ sourceDocumentId }) }),
   reorder: (type: string, locale: Lang | '*', items: { documentId: string; sortOrder: number }[]) =>
     request(`/api/panel/${type}/reorder${q({ locale })}`, { method: 'POST', body: JSON.stringify({ items }) }),
+  setAvailability: (type: string, documentId: string, available: boolean) =>
+    request(`/api/panel/${type}/entries/${documentId}/availability`, { method: 'POST', body: JSON.stringify({ available }) }),
 };
 
 export const media = {

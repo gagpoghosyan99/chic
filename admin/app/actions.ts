@@ -130,6 +130,10 @@ export async function saveEntry(input: {
       documentId = (await panel.create(type.key, locale, data)).documentId;
     }
     if (input.publish) await panel.action(type.key, documentId, 'publish', locale);
+    // Course registration is one switch for every language (draft + published).
+    if (type.key === 'courses' && typeof data.is_available === 'boolean') {
+      await panel.setAvailability('courses', documentId, data.is_available === true);
+    }
     refresh(type.key);
     return { ok: true, documentId };
   });
@@ -173,6 +177,16 @@ export async function reorderEntries(input: { type: string; locale?: string; doc
     const items = input.documentIds.map((documentId, i) => ({ documentId, sortOrder: type.sortable === 'desc' ? n - i : i + 1 }));
     await panel.reorder(type.key, input.allLanguages ? '*' : resolveLocale(type, input.locale)!, items);
     refresh(type.key);
+    return { ok: true };
+  });
+}
+
+/** Opens or closes course registration for every language at once (live on the website immediately). */
+export async function setCourseAvailability(input: { documentId: string; available: boolean }) {
+  return guard(async () => {
+    if (!input.documentId || typeof input.available !== 'boolean') return fail('invalid');
+    await panel.setAvailability('courses', input.documentId, input.available);
+    refresh('courses');
     return { ok: true };
   });
 }

@@ -222,9 +222,13 @@ export function LocaleColumn({
       </div>
 
       <div className="space-y-5 px-5 py-4">
-        {type.fields.map((field) => (
-          <FieldInput key={field.name} field={field} value={values[field.name]} onChange={(v) => setField(field.name, v)} error={errorText(errors[field.name] ?? '')} />
-        ))}
+        {type.fields
+          // Existing courses: registration is controlled once for all languages (CourseAvailability in the editor).
+          // New courses still show the switch so the first save can set the starting state.
+          .filter((field) => !(documentId && type.key === 'courses' && field.name === 'is_available'))
+          .map((field) => (
+            <FieldInput key={field.name} field={field} value={values[field.name]} onChange={(v) => setField(field.name, v)} error={errorText(errors[field.name] ?? '')} />
+          ))}
       </div>
 
       <div className="sticky bottom-0 mt-auto flex flex-wrap items-center justify-end gap-2 rounded-b-xl border-t border-slate-100 bg-white/95 px-5 py-3 backdrop-blur">

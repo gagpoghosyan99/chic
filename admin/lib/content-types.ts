@@ -120,8 +120,14 @@ export const CONTENT_TYPES: ContentType[] = [
       {
         name: 'is_available',
         type: 'boolean',
+        // Edited with CourseAvailability (one button for all languages), not per language column.
+        shared: true,
         label: l('Գրանցումը բաց է', 'Registration is open', 'Запись открыта'),
-        help: l('Միացված լինելու դեպքում կայքում կերևա «Գրանցվել» կոճակը', 'When on, the website shows the “Register” button', 'Если включено, на сайте будет кнопка «Записаться»'),
+        help: l(
+          'Մեկ կոճակով փակում կամ բացում է գրանցումը բոլոր լեզուների համար',
+          'One button opens or closes registration for every language',
+          'Одна кнопка открывает или закрывает запись для всех языков',
+        ),
       },
     ],
   },

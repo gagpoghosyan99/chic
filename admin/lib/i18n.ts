@@ -141,6 +141,41 @@ const dict = {
 
   'course.open': { hy: 'Գրանցումը բաց է', en: 'Registration open', ru: 'Запись открыта' },
   'course.closed': { hy: 'Գրանցումը փակ է', en: 'Registration closed', ru: 'Запись закрыта' },
+  'course.closeAll': {
+    hy: 'Փակել գրանցումը (բոլոր լեզուներով)',
+    en: 'Close registration (all languages)',
+    ru: 'Закрыть запись (все языки)',
+  },
+  'course.openAll': {
+    hy: 'Բացել գրանցումը (բոլոր լեզուներով)',
+    en: 'Open registration (all languages)',
+    ru: 'Открыть запись (все языки)',
+  },
+  'course.sharedHelp': {
+    hy: 'Գրանցումը մեկ է բոլոր լեզուների համար։ Փոփոխությունը կայքում երևում է անմիջապես։',
+    en: 'Registration is the same for every language. The change appears on the website immediately.',
+    ru: 'Запись общая для всех языков. Изменение сразу видно на сайте.',
+  },
+  'course.confirmClose': {
+    hy: 'Փակե՞լ գրանցումը այս դասընթացի համար բոլոր լեզուներով (ՀԱՅ, РУС, ENG)։ Կայքում «Գրանցվել» կոճակը կանհետանա։',
+    en: 'Close registration for this course in every language (HY, RU, EN)? The “Register” button will disappear on the website.',
+    ru: 'Закрыть запись на этот курс для всех языков (HY, RU, EN)? Кнопка «Записаться» исчезнет с сайта.',
+  },
+  'course.confirmOpen': {
+    hy: 'Բացե՞լ գրանցումը այս դասընթացի համար բոլոր լեզուներով (ՀԱՅ, РУС, ENG)։',
+    en: 'Open registration for this course in every language (HY, RU, EN)?',
+    ru: 'Открыть запись на этот курс для всех языков (HY, RU, EN)?',
+  },
+  'toast.registrationClosed': {
+    hy: 'Գրանցումը փակված է բոլոր լեզուներով',
+    en: 'Registration closed for all languages',
+    ru: 'Запись закрыта для всех языков',
+  },
+  'toast.registrationOpen': {
+    hy: 'Գրանցումը բացված է բոլոր լեզուներով',
+    en: 'Registration opened for all languages',
+    ru: 'Запись открыта для всех языков',
+  },
   'preview.note': {
     hy: 'Մոտավոր տեսքն է՝ ինչպես կերևա կայքում։ Պահպանված չէ, քանի դեռ չեք սեղմել պահպանման կոճակը։',
     en: 'An approximate view of how this will look on the website. Nothing is saved until you press a save button.',

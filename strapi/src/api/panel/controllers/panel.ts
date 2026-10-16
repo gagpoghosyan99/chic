@@ -233,4 +233,19 @@ export default {
     });
     ctx.body = { ok: true };
   },
+
+  // Opens or closes registration for every language of a course at once (draft + published).
+  async setAvailability(ctx: any) {
+    const { uid, model } = resolve(ctx);
+    if (!model.attributes.is_available) ctx.throw(400, 'Content type has no availability');
+    const { documentId } = ctx.params;
+    const available = ctx.request.body?.available;
+    if (typeof available !== 'boolean') ctx.throw(400, 'available must be true or false');
+
+    const meta: any = getStrapi().db.metadata.get(uid);
+    const column = meta.attributes.is_available.columnName ?? 'is_available';
+    const updated = await getStrapi().db.connection(meta.tableName).where({ document_id: String(documentId) }).update({ [column]: available });
+    if (!updated) ctx.throw(404, 'Not found');
+    ctx.body = { ok: true, available };
+  },
 };

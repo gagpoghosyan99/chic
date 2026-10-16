@@ -16,6 +16,7 @@ export default {
     route('POST', '/:type/entries/:documentId/unpublish', 'unpublish'),
     route('POST', '/:type/entries/:documentId/discard', 'discard'),
     route('POST', '/:type/entries/:documentId/link', 'link'),
+    route('POST', '/:type/entries/:documentId/availability', 'setAvailability'),
     route('POST', '/:type/reorder', 'reorder'),
   ],
 };
