@@ -4,6 +4,10 @@ import { useEffect, useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { usePathname } from "next/navigation";
 import Hero from "../components/home/Hero";
+import HomeBlog from "../components/home/HomeBlog";
+import HomeCourses from "../components/home/HomeCourses";
+import HomeTours from "../components/home/HomeTours";
+import PartnerMarquee from "../components/home/PartnerMarquee";
 import SectionWrapper from "../components/layout/SectionWrapper";
 import HistorySection from "../components/home/HistorySection";
 import TeamSection from "../components/home/TeamSection";
@@ -84,67 +88,10 @@ export default function Home() {
     return (
       <>
         <Hero />
-        <SectionWrapper id="history" className="bg-background-light">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tHistory("title")}
-            </h2>
-            {history?.about && (
-              <p className="text-text-secondary text-lg w-full leading-relaxed">
-                {history.about}
-              </p>
-            )}
-          </div>
-          <HistorySection />
-        </SectionWrapper>
-        <SectionWrapper id="team">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tTeam("title")}
-            </h2>
-          </div>
-          <TeamSection />
-        </SectionWrapper>
-        <SectionWrapper id="lecturers" className="bg-background-light">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tLecturers("title")}
-            </h2>
-          </div>
-          <LecturersSection />
-        </SectionWrapper>
-        <SectionWrapper id="courses">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tCourses("title")}
-            </h2>
-          </div>
-          <CoursesSection />
-        </SectionWrapper>
-        <SectionWrapper id="volunteers" className="bg-background-light">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tVolunteers("title")}
-            </h2>
-          </div>
-          <VolunteersSection />
-        </SectionWrapper>
-        <SectionWrapper id="volunteer" className="bg-background-light">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tVolunteer("title")}
-            </h2>
-          </div>
-          <VolunteerForm />
-        </SectionWrapper>
-        <SectionWrapper id="partners">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tPartners("title")}
-            </h2>
-          </div>
-          <PartnersSection />
-        </SectionWrapper>
+        <HomeBlog />
+        <HomeCourses />
+        <HomeTours />
+        <PartnerMarquee />
       </>
     );
   }
@@ -153,14 +100,12 @@ export default function Home() {
   return (
     <>
       {activeSection === "history" && (
-        <SectionWrapper id="history" className="bg-background-light">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tHistory("title")}
-            </h2>
-            {history?.about && (
-              <p className="text-text-secondary text-lg w-full leading-relaxed">
-                {history.about}
+        <SectionWrapper id="history" className="bg-background">
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold text-text-primary md:text-4xl">{tHistory("title")}</h2>
+            {(history?.about || tHistory("lead")) && (
+              <p className="mx-auto mt-4 max-w-3xl text-lg leading-relaxed text-text-secondary">
+                {history?.about || tHistory("lead")}
               </p>
             )}
           </div>
@@ -169,22 +114,20 @@ export default function Home() {
       )}
 
       {activeSection === "team" && (
-        <SectionWrapper id="team">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tTeam("title")}
-            </h2>
+        <SectionWrapper id="team" className="bg-background">
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold text-text-primary md:text-4xl">{tTeam("title")}</h2>
+            <p className="mx-auto mt-4 max-w-3xl text-lg text-text-secondary">{tTeam("lead")}</p>
           </div>
           <TeamSection />
         </SectionWrapper>
       )}
 
       {activeSection === "lecturers" && (
-        <SectionWrapper id="lecturers" className="bg-background-light">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-              {tLecturers("title")}
-            </h2>
+        <SectionWrapper id="lecturers" className="bg-background">
+          <div className="mb-10 text-center">
+            <h2 className="text-3xl font-bold text-text-primary md:text-4xl">{tLecturers("title")}</h2>
+            <p className="mx-auto mt-4 max-w-3xl text-lg text-text-secondary">{tLecturers("lead")}</p>
           </div>
           <LecturersSection />
         </SectionWrapper>
@@ -201,10 +144,9 @@ export default function Home() {
             <CoursesSection />
           </SectionWrapper>
           <SectionWrapper id="volunteers" className="bg-background-light">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-text-primary mb-4">
-                {tVolunteers("title")}
-              </h2>
+            <div className="mb-10 text-center">
+              <h2 className="text-3xl font-bold text-text-primary md:text-4xl">{tVolunteers("title")}</h2>
+              <p className="mx-auto mt-4 max-w-3xl text-lg text-text-secondary">{tVolunteers("lead")}</p>
             </div>
             <VolunteersSection />
           </SectionWrapper>

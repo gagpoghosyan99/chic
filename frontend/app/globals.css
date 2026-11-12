@@ -9,6 +9,7 @@
   
   html {
     @apply scroll-smooth;
+    font-family: var(--font-noto-serif), var(--font-noto-serif-armenian), "Noto Serif", "Noto Serif Armenian", serif;
   }
   
   html,
@@ -18,7 +19,15 @@
   
   body {
     @apply flex flex-col min-h-screen bg-background text-text-primary;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-noto-serif), var(--font-noto-serif-armenian), "Noto Serif", "Noto Serif Armenian", serif;
+    font-size-adjust: from-font;
+    overflow-x: clip;
+  }
+
+  @supports not (font-size-adjust: from-font) {
+    body {
+      line-height: 1.5;
+    }
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -147,6 +156,208 @@
     width: 100%;
     height: 100%;
     border: 0;
+  }
+}
+
+.offer-list {
+  position: relative;
+}
+
+.offer-list::before {
+  content: "";
+  position: absolute;
+  left: 1.85rem;
+  top: 1.5rem;
+  bottom: 1.5rem;
+  width: 2px;
+  background: #d5e6ee;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((animation-timeline: view()) and (animation-range: entry)) {
+    @keyframes offer-in {
+      from {
+        opacity: 0;
+        transform: translateY(1.5rem);
+      }
+    }
+
+    .offer-item {
+      animation: offer-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    @keyframes person-in {
+      from {
+        opacity: 0;
+        transform: translateY(1.75rem) scale(0.97);
+      }
+    }
+
+    .person-card {
+      animation: person-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 65%;
+    }
+  }
+}
+
+.about-hero {
+  isolation: isolate;
+}
+
+.depth-grid {
+  perspective: none;
+}
+
+@media (min-width: 1280px) {
+  .depth-grid {
+    perspective: 1400px;
+  }
+}
+
+.card-scroller {
+  scrollbar-width: none;
+  touch-action: pan-x pan-y;
+}
+
+.card-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.card-scroll-btn {
+  height: 2.75rem;
+  width: 2.75rem;
+  place-items: center;
+  border-radius: 9999px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  color: #005477;
+  box-shadow: 0 8px 20px -12px rgba(0, 63, 92, 0.8);
+  touch-action: manipulation;
+}
+
+.card-scroll-btn:disabled {
+  opacity: 0.45;
+}
+
+.card-scroll-btn:focus-visible {
+  outline: 2px solid #005477;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .card-scroller {
+    scroll-behavior: smooth;
+  }
+}
+
+.depth-card {
+  position: relative;
+  transform-style: preserve-3d;
+  background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0) 30%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.9) inset,
+    0 16px 30px -22px rgba(0, 63, 92, 0.7);
+}
+
+.nav-pop-panel {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateX(-50%) rotateX(-18deg) translateY(10px);
+  transform-origin: top center;
+  pointer-events: none;
+}
+
+.nav-pop-link:hover {
+  background: #e6f2f5;
+  color: #005477;
+}
+
+.site-nav-link {
+  position: relative;
+  background: transparent;
+}
+
+.site-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 0.3rem;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s ease;
+}
+
+.site-nav-link:hover::after,
+.nav-pop:hover > .site-nav-link::after,
+.nav-pop:focus-within > .site-nav-link::after {
+  transform: scaleX(1);
+}
+
+.partner-track {
+  display: flex;
+  width: max-content;
+  animation: partner-marquee 48s linear infinite;
+}
+
+.partner-track-paused {
+  animation-play-state: paused;
+}
+
+@keyframes partner-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: no-preference) and (hover: hover) and (pointer: fine) {
+  .depth-card {
+    transition: transform 0.45s ease, box-shadow 0.45s ease;
+  }
+
+  .depth-card:hover {
+    transform: rotateX(8deg) rotateY(-9deg) translateY(-10px) scale(1.03);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.95) inset,
+      0 28px 40px -18px rgba(0, 63, 92, 0.55);
+    z-index: 1;
+  }
+
+  .depth-grid .depth-card:nth-child(2):hover {
+    transform: rotateX(8deg) rotateY(9deg) translateY(-10px) scale(1.03);
+  }
+
+  .nav-pop-panel {
+    transition: transform 0.35s ease, opacity 0.35s ease, visibility 0.35s ease;
+  }
+
+  .nav-pop:hover .nav-pop-panel,
+  .nav-pop:focus-within .nav-pop-panel {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%) rotateX(0deg) translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-pop:hover .nav-pop-panel,
+  .nav-pop:focus-within .nav-pop-panel {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(-50%);
+  }
+
+  .partner-track {
+    animation: none;
+    flex-wrap: wrap;
+    width: auto;
+    justify-content: center;
   }
 }
 

@@ -2,42 +2,31 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { fetchHistory, toAbsoluteStrapiUrl, type History, type RichTextNode } from "@/lib/strapi";
 
-// Helper function to extract text from rich text nodes
 function extractText(nodes: RichTextNode[]): string {
   return nodes
     .map((node) => {
-      if (node.type === "text") {
-        return node.text;
-      }
-      if ("children" in node) {
-        return extractText(node.children);
-      }
+      if (node.type === "text") return node.text;
+      if ("children" in node) return extractText(node.children);
       return "";
     })
     .join("")
     .trim();
 }
 
-// Render rich text nodes to React components
 function renderRichTextNode(node: RichTextNode, index: number): React.ReactNode {
   switch (node.type) {
     case "text": {
       let content: React.ReactNode = node.text;
-      if (node.bold) {
-        content = <strong key={index}>{content}</strong>;
-      }
-      if (node.italic) {
-        content = <em key={index}>{content}</em>;
-      }
+      if (node.bold) content = <strong key={index}>{content}</strong>;
+      if (node.italic) content = <em key={index}>{content}</em>;
       return content;
     }
     case "paragraph": {
       const children = node.children.map((child, i) => renderRichTextNode(child, i));
-      const text = extractText(node.children);
-      if (!text) return null;
+      if (!extractText(node.children)) return null;
       return (
         <p key={index} className="text-text-secondary leading-relaxed">
           {children}
@@ -46,8 +35,7 @@ function renderRichTextNode(node: RichTextNode, index: number): React.ReactNode 
     }
     case "heading": {
       const level = node.level || 1;
-      const text = extractText(node.children);
-      if (!text) return null;
+      if (!extractText(node.children)) return null;
       const children = node.children.map((child, i) => renderRichTextNode(child, i));
       const HeadingTag = `h${Math.min(Math.max(level, 1), 6)}` as keyof JSX.IntrinsicElements;
       return (
@@ -60,7 +48,7 @@ function renderRichTextNode(node: RichTextNode, index: number): React.ReactNode 
       const children = node.children.map((child, i) => renderRichTextNode(child, i));
       const Tag = node.format === "ordered" ? "ol" : "ul";
       return (
-        <Tag key={index} className="list-disc list-inside space-y-2 text-text-secondary ml-4">
+        <Tag key={index} className="ml-4 list-inside list-disc space-y-2 text-text-secondary">
           {children}
         </Tag>
       );
@@ -76,13 +64,7 @@ function renderRichTextNode(node: RichTextNode, index: number): React.ReactNode 
     case "link": {
       const children = node.children.map((child, i) => renderRichTextNode(child, i));
       return (
-        <a
-          key={index}
-          href={node.url}
-          target={node.target}
-          rel={node.rel}
-          className="text-primary hover:underline"
-        >
+        <a key={index} href={node.url} target={node.target} rel={node.rel} className="text-primary hover:underline">
           {children}
         </a>
       );
@@ -92,10 +74,9 @@ function renderRichTextNode(node: RichTextNode, index: number): React.ReactNode 
   }
 }
 
-// Parse history rich text to extract mission, vision, and values
 function parseHistoryContent(historyNodes?: RichTextNode[]) {
-  if (!historyNodes || historyNodes.length === 0) {
-    return { mission: null, missionText: null, vision: null, visionText: null, values: [] };
+  if (!historyNodes?.length) {
+    return { mission: null, missionText: null, vision: null, visionText: null, values: [] as string[] };
   }
 
   let mission: string | null = null;
@@ -103,52 +84,36 @@ function parseHistoryContent(historyNodes?: RichTextNode[]) {
   let vision: string | null = null;
   let visionText: string | null = null;
   const values: string[] = [];
-
   let currentSection: "mission" | "vision" | "values" | null = null;
   let i = 0;
 
   while (i < historyNodes.length) {
     const node = historyNodes[i];
-
     if (node.type === "heading") {
       const headingText = extractText(node.children).toLowerCase();
-      
       if (headingText.includes("mission")) {
         currentSection = "mission";
         mission = extractText(node.children);
-        // Look for the next paragraph as mission text
-        if (i + 1 < historyNodes.length) {
-          const nextNode = historyNodes[i + 1];
-          if (nextNode.type === "paragraph") {
-            missionText = extractText(nextNode.children);
-            i++; // Skip the paragraph
-          }
+        const next = historyNodes[i + 1];
+        if (next?.type === "paragraph" && "children" in next) {
+          missionText = extractText(next.children);
+          i++;
         }
       } else if (headingText.includes("vision")) {
         currentSection = "vision";
         vision = extractText(node.children);
-        // Look for the next paragraph as vision text
-        if (i + 1 < historyNodes.length) {
-          const nextNode = historyNodes[i + 1];
-          if (nextNode.type === "paragraph") {
-            visionText = extractText(nextNode.children);
-            i++; // Skip the paragraph
-          }
+        const next = historyNodes[i + 1];
+        if (next?.type === "paragraph" && "children" in next) {
+          visionText = extractText(next.children);
+          i++;
         }
       } else if (headingText.includes("value")) {
         currentSection = "values";
       }
     } else if (node.type === "paragraph" && currentSection === "values") {
-      const text = extractText(node.children);
-      if (text) {
-        // Remove emoji and bullet points if present
-        const cleanText = text.replace(/^[🔹•\-\s]+/, "").trim();
-        if (cleanText) {
-          values.push(cleanText);
-        }
-      }
+      const cleanText = extractText(node.children).replace(/^[🔹•\-\s]+/, "").trim();
+      if (cleanText) values.push(cleanText);
     }
-
     i++;
   }
 
@@ -157,8 +122,9 @@ function parseHistoryContent(historyNodes?: RichTextNode[]) {
 
 export default function HistorySection() {
   const locale = useLocale() as "hy" | "ru" | "en";
+  const t = useTranslations("history");
   const [history, setHistory] = useState<History | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
@@ -166,10 +132,8 @@ export default function HistorySection() {
       try {
         setIsLoading(true);
         const data = await fetchHistory(locale);
-        if (isMounted) {
-          setHistory(data);
-        }
-      } catch (e) {
+        if (isMounted) setHistory(data);
+      } catch {
         if (isMounted) setHistory(null);
       }
       if (isMounted) setIsLoading(false);
@@ -179,109 +143,102 @@ export default function HistorySection() {
     };
   }, [locale]);
 
-  const { mission, missionText, vision, visionText, values } = useMemo(() => {
-    return parseHistoryContent(history?.history);
-  }, [history?.history]);
-
-  // Render all history paragraphs if structured content is not found
-  const renderHistoryContent = () => {
-    if (mission && missionText) {
-      return (
-        <>
-          {mission && missionText && (
-            <div>
-              <h3 className="text-xl font-semibold text-primary mb-2">
-                {mission}
-              </h3>
-              <p className="text-text-secondary leading-relaxed">{missionText}</p>
-            </div>
-          )}
-          {vision && visionText && (
-            <div>
-              <h3 className="text-xl font-semibold text-primary mb-2">
-                {vision}
-              </h3>
-              <p className="text-text-secondary leading-relaxed">{visionText}</p>
-            </div>
-          )}
-          {values.length > 0 && (
-            <div>
-              <h3 className="text-xl font-semibold text-primary mb-3">
-                Values
-              </h3>
-              <ul className="space-y-2">
-                {values.map((value, index) => (
-                  <li key={index} className="flex items-start gap-2 text-text-secondary">
-                    <span className="text-primary mt-1">•</span>
-                    <span>{value}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </>
-      );
-    }
-
-    // Fallback: render all nodes from history
-    if (history?.history && history.history.length > 0) {
-      return (
-        <div className="space-y-4">
-          {history.history.map((node, index) => renderRichTextNode(node, index))}
-        </div>
-      );
-    }
-
-    return null;
-  };
+  const { mission, missionText, vision, visionText, values } = useMemo(
+    () => parseHistoryContent(history?.history),
+    [history?.history],
+  );
 
   if (isLoading) {
     return (
-      <div className="grid md:grid-cols-2 gap-8 lg:gap-12 items-start">
-        <div className="flex flex-col items-center">
-          <div className="relative w-64 h-64 rounded-2xl overflow-hidden shadow-lg bg-gray-200 animate-pulse" />
-          <div className="h-4 w-32 bg-gray-200 rounded mt-4 animate-pulse" />
-        </div>
-        <div className="space-y-6">
-          <div className="h-24 bg-gray-200 rounded animate-pulse" />
-          <div className="h-24 bg-gray-200 rounded animate-pulse" />
-          <div className="h-32 bg-gray-200 rounded animate-pulse" />
+      <div className="grid items-start gap-8 lg:grid-cols-[minmax(16rem,22rem)_1fr] lg:gap-12">
+        <div className="aspect-[4/5] animate-pulse rounded-3xl bg-primary-lighter" />
+        <div className="space-y-4">
+          <div className="h-32 animate-pulse rounded-2xl bg-primary-lighter" />
+          <div className="h-32 animate-pulse rounded-2xl bg-primary-lighter" />
         </div>
       </div>
     );
   }
 
-  if (!history) {
-    return null;
-  }
+  if (!history) return null;
 
   const founderImageUrl = history.founder_photo
     ? toAbsoluteStrapiUrl(
         history.founder_photo.formats?.medium?.url ||
-        history.founder_photo.formats?.small?.url ||
-        history.founder_photo.url
+          history.founder_photo.formats?.small?.url ||
+          history.founder_photo.url,
       )
     : "/roz.jpeg";
 
+  const hasStructured = !!(mission && missionText);
+
   return (
-    <div className="grid md:grid-cols-[auto_1fr] gap-6 lg:gap-8 items-start">
-      <div className="flex flex-col items-start p-0">
-        <div className="relative w-72 h-72 rounded-2xl overflow-hidden shadow-lg p-0">
+    <div className="grid items-start gap-8 lg:grid-cols-[minmax(16rem,22rem)_1fr] lg:gap-12">
+      <aside className="person-card depth-card relative mx-auto w-full max-w-sm overflow-hidden rounded-3xl border border-white/70 bg-white lg:mx-0">
+        <div className="relative aspect-[4/5] overflow-hidden bg-primary-lighter">
           <Image
             src={founderImageUrl || "/roz.jpeg"}
             alt={history.founder_full_name || "Founder"}
             fill
             className="object-cover"
+            sizes="(max-width: 1024px) 90vw, 22rem"
+            priority
           />
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-primary-dark/80 via-primary-dark/35 to-transparent p-5 pt-16">
+            {history.founder_full_name && (
+              <p className="text-lg font-semibold text-white">{history.founder_full_name}</p>
+            )}
+            <p className="mt-1 text-sm text-white/80">{t("founderRole")}</p>
+          </div>
         </div>
-        {history.founder_full_name && (
-          <p className="text-left mt-2 text-text-secondary font-medium p-0 w-72">
-            {history.founder_full_name}
-          </p>
-        )}
-      </div>
-      <div className="space-y-6 w-full">
-        {renderHistoryContent()}
+      </aside>
+
+      <div className="space-y-5">
+        {hasStructured ? (
+          <>
+            {mission && missionText && (
+              <div className="person-card depth-card rounded-2xl border border-white/70 bg-white p-6 sm:p-8">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary/70">
+                  {t("missionLabel")}
+                </p>
+                <h3 className="text-xl font-semibold text-primary sm:text-2xl">{mission}</h3>
+                <p className="mt-3 text-base leading-relaxed text-text-secondary">{missionText}</p>
+              </div>
+            )}
+            {vision && visionText && (
+              <div className="person-card depth-card rounded-2xl border border-white/70 bg-white p-6 sm:p-8">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary/70">
+                  {t("visionLabel")}
+                </p>
+                <h3 className="text-xl font-semibold text-primary sm:text-2xl">{vision}</h3>
+                <p className="mt-3 text-base leading-relaxed text-text-secondary">{visionText}</p>
+              </div>
+            )}
+            {values.length > 0 && (
+              <div className="person-card depth-card rounded-2xl border border-white/70 bg-white p-6 sm:p-8">
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary/70">
+                  {t("valuesLabel")}
+                </p>
+                <h3 className="mb-4 text-xl font-semibold text-primary sm:text-2xl">{t("values")}</h3>
+                <ul className="grid gap-3 sm:grid-cols-2">
+                  {values.map((value, index) => (
+                    <li
+                      key={index}
+                      className="flex items-start gap-3 rounded-xl bg-primary-lighter/60 px-4 py-3 text-sm text-text-secondary"
+                    >
+                      <span className="mt-1 size-2 shrink-0 rounded-full bg-accent" />
+                      <span>{value}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </>
+        ) : history.history?.length ? (
+          <div className="person-card depth-card space-y-4 rounded-2xl border border-white/70 bg-white p-6 sm:p-8">
+            {history.history.map((node, index) => renderRichTextNode(node, index))}
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -45,11 +45,11 @@ export default function VolunteerForm() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="person-card depth-card mx-auto max-w-2xl rounded-3xl border border-white/70 bg-white p-6 shadow-[0_24px_50px_-30px_rgba(0,63,92,0.55)] sm:p-8">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid gap-6 md:grid-cols-2">
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-text-primary mb-2">
+            <label htmlFor="name" className="mb-2 block text-sm font-medium text-text-primary">
               {t("name")} <span className="text-red-500">*</span>
             </label>
             <input
@@ -57,11 +57,11 @@ export default function VolunteerForm() {
               id="name"
               name="name"
               required
-              className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              className="w-full rounded-xl border border-border px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
           <div>
-            <label htmlFor="surname" className="block text-sm font-medium text-text-primary mb-2">
+            <label htmlFor="surname" className="mb-2 block text-sm font-medium text-text-primary">
               {t("surname")} <span className="text-red-500">*</span>
             </label>
             <input
@@ -69,7 +69,7 @@ export default function VolunteerForm() {
               id="surname"
               name="surname"
               required
-              className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+              className="w-full rounded-xl border border-border px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </div>
         </div>
@@ -83,12 +83,12 @@ export default function VolunteerForm() {
             id="fathername"
             name="fathername"
             required
-            className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            className="w-full rounded-xl border border-border px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
         <div>
-          <label htmlFor="birthdate" className="block text-sm font-medium text-text-primary mb-2">
+          <label htmlFor="birthdate" className="mb-2 block text-sm font-medium text-text-primary">
             {t("birthdate")} <span className="text-red-500">*</span>
           </label>
           <input
@@ -96,12 +96,12 @@ export default function VolunteerForm() {
             id="birthdate"
             name="birthdate"
             required
-            className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            className="w-full rounded-xl border border-border px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
         <div>
-          <label htmlFor="university" className="block text-sm font-medium text-text-primary mb-2">
+          <label htmlFor="university" className="mb-2 block text-sm font-medium text-text-primary">
             {t("university")} <span className="text-red-500">*</span>
           </label>
           <input
@@ -109,12 +109,12 @@ export default function VolunteerForm() {
             id="university"
             name="university"
             required
-            className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            className="w-full rounded-xl border border-border px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 
         <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-text-primary mb-2">
+          <label htmlFor="phone" className="mb-2 block text-sm font-medium text-text-primary">
             {t("phone")} <span className="text-red-500">*</span>
           </label>
           <input
@@ -122,7 +122,7 @@ export default function VolunteerForm() {
             id="phone"
             name="phone"
             required
-            className="w-full px-4 py-3 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            className="w-full rounded-xl border border-border px-4 py-3 transition-all focus:border-transparent focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
 

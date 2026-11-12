@@ -25,34 +25,74 @@
     "volunteers": "Our Volunteers",
     "becomeVolunteer": "Become a Volunteer",
     "announcements": "Blog",
+    "tours": "Tours",
     "vacancies": "Vacancies"
   },
   "home": {
     "welcome": "Welcome to Collaborative Healthcare Innovations Centre",
     "thanks": "Thank you for visiting 🫶",
-    "thanksMessage": "We believe in a healthcare environment built on cooperation, trust, and care."
+    "thanksMessage": "We believe in a healthcare environment built on cooperation, trust, and care.",
+    "coverTitle": "Solutions for developing healthcare and improving quality",
+    "coverLead": "We offer professional services for healthcare organizations and specialists.",
+    "pauseMotion": "Pause",
+    "playMotion": "Play",
+    "seeMore": "See more",
+    "loading": "Loading...",
+    "previous": "Previous",
+    "next": "Next",
+    "slideStatus": "{current} of {total}",
+    "offers": {
+      "label": "Our directions",
+      "education": "Professional education and focused courses",
+      "quality": "Quality management consulting",
+      "licensing": "Licensing consulting",
+      "infrastructure": "Healthcare infrastructure development",
+      "medTour": "CHIC Med Tour — Professional medical tours",
+      "newDirection": "New direction"
+    },
+    "partnersLabel": "Our partners",
+    "pausePartners": "Pause partners"
+  },
+  "tours": {
+    "title": "Tours",
+    "lead": "CHIC Med Tour — professional medical tours for healthcare specialists and organizations.",
+    "card1Title": "Professional medical tours",
+    "card1Text": "Organized visits where specialists see clinical work on site.",
+    "card2Title": "Exchange of experience",
+    "card2Text": "Meetings and joint discussions with partner physicians and teams.",
+    "card3Title": "New direction",
+    "card3Text": "The program has just opened. Contact us for the details."
   },
   "history": {
     "title": "History",
+    "lead": "How CHIC began, what we work for, and the values that guide us.",
     "founder": "Founder and President - Roza Margaryan",
+    "founderRole": "Founder and President",
+    "missionLabel": "Mission",
+    "visionLabel": "Vision",
+    "valuesLabel": "Values",
     "mission": "Our Mission",
     "missionText": "to contribute to improving the quality of the healthcare system and preserving public health.",
     "vision": "🎯 Our Vision",
     "visionText": "achieving sustainable success through meeting beneficiaries' needs and becoming a reliable partner in healthcare.",
-    "values": "🎯 Our Values.",
+    "values": "Our values",
     "value1": "🔹 Professionalism",
     "value2": "🔹 Responsibility",
     "value3": "🔹 Honesty and Transparency",
     "value4": "🔹 Teamwork"
   },
   "team": {
-    "title": "Our Team"
+    "title": "Our Team",
+    "lead": "Specialists working every day to improve the quality of healthcare."
   },
   "lecturers": {
-    "title": "Our Lecturers"
+    "title": "Our Lecturers",
+    "lead": "Experienced lecturers and field experts who share their knowledge in our courses."
   },
   "volunteers": {
-    "title": "Our Volunteers"
+    "title": "Our Volunteers",
+    "lead": "People who give their time and energy to CHIC’s mission.",
+    "ctaLead": "Join us — fill in the form and become a volunteer."
   },
   "partners": {
     "title": "Our Partners"

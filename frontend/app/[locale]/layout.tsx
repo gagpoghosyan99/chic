@@ -1,11 +1,24 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
+import { Noto_Serif, Noto_Serif_Armenian } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
 import Header from '../components/layout/Header';
-import ContactBar from '../components/layout/ContactBar';
 import Footer from '../components/layout/Footer';
 import '../globals.css';
+
+const notoSerif = Noto_Serif({
+  subsets: ['latin', 'latin-ext', 'cyrillic', 'cyrillic-ext'],
+  display: 'swap',
+  variable: '--font-noto-serif',
+});
+
+const notoSerifArmenian = Noto_Serif_Armenian({
+  subsets: ['armenian'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-noto-serif-armenian',
+});
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
@@ -40,10 +53,9 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale}>
+    <html lang={locale} className={`${notoSerif.variable} ${notoSerifArmenian.variable}`}>
       <body>
         <NextIntlClientProvider messages={messages}>
-          <ContactBar />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer />

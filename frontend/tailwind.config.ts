@@ -34,7 +34,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["Segoe UI", "system-ui", "-apple-system", "sans-serif"],
+        sans: ["var(--font-noto-serif)", "var(--font-noto-serif-armenian)", "Noto Serif", "Noto Serif Armenian", "serif"],
       },
       spacing: {
         section: "4rem",

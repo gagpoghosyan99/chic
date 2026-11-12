@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { fetchSocialMedia, type SocialMedia } from "@/lib/strapi";
 
 export default function Footer() {
+  const t = useTranslations("common");
   const [socialMedia, setSocialMedia] = useState<SocialMedia | null>(null);
 
   useEffect(() => {
@@ -27,11 +29,24 @@ export default function Footer() {
   return (
     <footer className="bg-primary-dark text-white py-12 mt-auto">
       <div className="container-content">
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="text-center md:text-left">
-            <p className="text-white/80 text-sm">
+        <div className="mb-8 grid gap-6 border-b border-white/15 pb-8 md:grid-cols-2">
+          <div>
+            <p className="text-lg font-semibold">{t("orgName")}</p>
+            <p className="mt-2 text-sm text-white/70">
               © {new Date().getFullYear()} Center for Joint Healthcare Innovations NGO
             </p>
+          </div>
+          <div className="flex flex-col gap-2 text-sm md:items-end">
+            <a href="mailto:chic.ngo.arm@gmail.com" className="hover:text-white/80">
+              {t("email")}: chic.ngo.arm@gmail.com
+            </a>
+            <a href="tel:+37444776701" className="hover:text-white/80">
+              {t("phone")}: (+374) 44 776701
+            </a>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="text-center md:text-left">
             <p className="text-white/60 text-xs mt-1">
               All rights reserved
             </p>
